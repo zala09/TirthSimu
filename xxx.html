@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>730 Days of You | Anniversary</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@300;400;600&family=Playfair+Display:italic,wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-pink: #ff85a1;
+            --soft-cream: #fff5f7;
+            --heart-red: #ff4d6d;
+            --deep-rose: #c9184a;
+            --midnight: #0f0c29;
+            --gold: #d4af37;
+        }
+
+        * { cursor: none; }
+
+        html, body {
+            margin: 0;
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--soft-cream);
+            color: #4a4a4a;
+            overflow-x: hidden;
+        }
+
+        /* Scroll Snap for Section Transitions */
+        @media (min-width: 768px) {
+            html {
+                scroll-snap-type: y mandatory;
+            }
+            section {
+                scroll-snap-align: start;
+                scroll-snap-stop: always;
+            }
+        }
+
+        section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            padding: 2rem;
+        }
+
+        .cursive { font-family: 'Dancing Script', cursive; }
+        .serif-italic { font-family: 'Playfair Display', serif; font-style: italic; }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 40px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.06);
+        }
+
+        /* Polaroid Styling */
+        .polaroid {
+            background: #ffffff;
+            padding: 1rem 1rem 3.5rem 1rem;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+            border-radius: 2px;
+            position: relative;
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .polaroid img {
+            filter: sepia(5%) contrast(102%);
+            border: 1px solid rgba(0,0,0,0.03);
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Video Call Frame */
+        .video-call-frame {
+            position: relative;
+            width: 100%;
+            max-width: 280px;
+            aspect-ratio: 9/16;
+            background: #000;
+            border-radius: 35px;
+            border: 8px solid #222;
+            overflow: hidden;
+            box-shadow: 0 40px 80px rgba(0,0,0,0.4);
+        }
+
+        .video-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, transparent 15%, transparent 85%, rgba(0,0,0,0.7) 100%);
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        /* Custom Heart Cursor */
+        #cursor {
+            width: 28px;
+            height: 28px;
+            background: var(--heart-red);
+            position: fixed;
+            top: 0;
+            left: 0;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10000;
+            transform: translate(-50%, -50%);
+            transition: transform 0.15s ease-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px var(--primary-pink);
+        }
+
+        #cursor::after { content: '❤'; color: white; font-size: 12px; }
+
+        /* Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        .petal {
+            position: fixed;
+            pointer-events: none;
+            z-index: -1;
+            animation: fall var(--d) linear infinite;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-10vh) translateX(0) rotate(0deg); opacity: 0; }
+            15% { opacity: 0.8; }
+            100% { transform: translateY(110vh) translateX(150px) rotate(720deg); opacity: 0; }
+        }
+
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            background: rgba(0,0,0,0.1);
+            border-radius: 50%;
+            transition: all 0.5s ease;
+        }
+        .nav-dot.active {
+            background: var(--heart-red);
+            transform: scale(2);
+            box-shadow: 0 0 15px var(--primary-pink);
+        }
+
+        /* Trivia Styles */
+        .trivia-btn {
+            background: white;
+            border: 2px solid var(--primary-pink);
+            padding: 1rem;
+            border-radius: 20px;
+            transition: all 0.3s;
+            color: var(--deep-rose);
+            font-weight: 600;
+        }
+        .trivia-btn:hover {
+            background: var(--primary-pink);
+            color: white;
+        }
+
+        /* Star Twinkle */
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration) infinite ease-in-out;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.3); }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--soft-cream); }
+        ::-webkit-scrollbar-thumb { background: var(--primary-pink); border-radius: 10px; }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+
+        /* Floating elements for visual depth */
+        .floating-heart {
+            position: absolute;
+            opacity: 0.15;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0); }
+            50% { transform: translateY(-30px) rotate(10deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="cursor"></div>
+
+    <!-- Navigation Menu -->
+    <nav class="fixed right-6 top-1/2 -translate-y-1/2 z-50 flex flex-col space-y-5 hidden md:flex">
+        <a href="#hero" class="nav-dot active" title="Beginning"></a>
+        <a href="#pulse" class="nav-dot" title="The Pulse"></a>
+        <a href="#connection" class="nav-dot" title="Connection"></a>
+        <a href="#reasons" class="nav-dot" title="730 Reasons"></a>
+        <a href="#lexicon" class="nav-dot" title="Our Lexicon"></a>
+        <a href="#gallery" class="nav-dot" title="Gallery"></a>
+        <a href="#mood-letters" class="nav-dot" title="Sanctuary"></a>
+        <a href="#trivia" class="nav-dot" title="Trivia"></a>
+        <a href="#promises" class="nav-dot" title="Promises"></a>
+        <a href="#celestial" class="nav-dot" title="Infinity"></a>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="bg-gradient-to-br from-[#fff0f3] to-white">
+        <div class="absolute inset-0 opacity-10">
+            <svg width="100%" height="100%"><pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse"><path d="M 60 0 L 0 0 0 60" fill="none" stroke="#ffb3c1" stroke-width="0.5"/></pattern><rect width="100%" height="100%" fill="url(#grid)" /></svg>
+        </div>
+        <div class="text-center z-10 px-4">
+            <span class="text-pink-400 tracking-[0.6em] uppercase text-xs md:text-sm mb-6 block reveal">Since February 10, 2024</span>
+            <h1 class="text-6xl md:text-9xl cursive text-pink-600 mb-8 reveal stagger-1">2 Whole Years.</h1>
+            <p class="serif-italic text-2xl md:text-4xl text-gray-400 reveal stagger-2">For my Moti</p>.
+             <p class="serif-italic text-2xl md:text-4xl text-gray-400 reveal stagger-3"<p>Punjabi fire meets Gujarati Sweetness❤️</p>
+        </div>
+        <div class="absolute bottom-12 animate-bounce text-pink-300 reveal stagger-3">client
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="1.5" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+        </div>
+    </section>
+
+    <!-- The Pulse (Live Counter) -->
+    <section id="pulse" class="bg-white">
+        <div class="glass p-8 md:p-16 text-center max-w-5xl w-full reveal">
+            <h2 class="text-3xl md:text-5xl cursive text-pink-500 mb-8">The Pulse of Us</h2>
+            <p class="text-gray-500 mb-12 italic text-lg px-2">Every millisecond has been an honor.</p>
+            <div id="counter" class="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-10">
+                <div class="bg-rose-50/50 p-6 rounded-[30px] border border-pink-100">
+                    <span id="days" class="text-4xl md:text-7xl font-light text-pink-600">0</span>
+                    <p class="text-xs md:text-sm uppercase mt-2 tracking-widest text-pink-400 font-semibold">Days</p>
+                </div>
+                <div class="bg-rose-50/50 p-6 rounded-[30px] border border-pink-100">
+                    <span id="hours" class="text-4xl md:text-7xl font-light text-pink-600">0</span>
+                    <p class="text-xs md:text-sm uppercase mt-2 tracking-widest text-pink-400 font-semibold">Hours</p>
+                </div>
+                <div class="bg-rose-50/50 p-6 rounded-[30px] border border-pink-100">
+                    <span id="minutes" class="text-4xl md:text-7xl font-light text-pink-600">0</span>
+                    <p class="text-xs md:text-sm uppercase mt-2 tracking-widest text-pink-400 font-semibold">Minutes</p>
+                </div>
+                <div class="bg-rose-50/50 p-6 rounded-[30px] border border-pink-100">
+                    <span id="seconds" class="text-4xl md:text-7xl font-light text-pink-600">0</span>
+                    <p class="text-xs md:text-sm uppercase mt-2 tracking-widest text-pink-400 font-semibold">Seconds</p>
+                </div>
+            </div>
+            <p class="mt-16 text-pink-500 font-light tracking-[0.4em] uppercase text-sm animate-pulse">730 Days and I'm still just getting started.</p>
+        </div>
+    </section>
+
+    <!-- The Connection (Video Call) -->
+    <section id="connection" class="bg-rose-50/15">
+        <div class="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 items-center px-6">
+            <div class="reveal">
+                <div class="w-16 h-1 bg-pink-400 mb-8"></div>
+                <h2 class="text-4xl md:text-6xl cursive text-pink-600 mb-8">To my Moti</h2>
+                <p class="text-xl md:text-2xl serif-italic text-gray-500 mb-10 leading-relaxed">We turned pixelated faces into our primary oxygen. Distance was just the background noise to our laughter.</p>
+                <div class="space-y-6 text-gray-600">
+                    <p class="flex items-center gap-4 italic"><span class="text-2xl">📱</span> "The late nights where the sun came up and we were still talking."</p>
+                    <p class="flex items-center gap-4 italic"><span class="text-2xl">💤</span> "Falling asleep with the line open just to hear you breathe."</p>
+                    <p class="flex items-center gap-4 italic"><span class="text-2xl">✨</span> "The magic of the 'connected' chime."</p>
+                </div>
+            </div>
+            <div class="flex justify-center reveal stagger-1">
+                <div class="video-call-frame">
+                    <div class="video-overlay">
+                        <div class="absolute top-6 left-6 text-white text-[10px] font-bold flex items-center gap-2 tracking-widest">
+                            <span class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span> IN CALL: SIMU
+                        </div>
+                        <div class="absolute bottom-10 left-0 right-0 flex justify-center gap-6">
+                            <button class="w-12 h-12 rounded-full bg-red-600 flex items-center justify-center text-white text-xl hover:scale-110 transition-transform">📞</button>
+                            <button class="w-12 h-12 rounded-full bg-white/10 backdrop-blur-xl flex items-center justify-center text-white text-xl hover:scale-110 transition-transform">🎤</button>
+                            <button class="w-12 h-12 rounded-full bg-white/10 backdrop-blur-xl flex items-center justify-center text-white text-xl hover:scale-110 transition-transform">📷</button>
+                        </div>
+                    </div>
+                    <video autoplay muted loop playsinline class="w-full h-full object-cover">
+                        <source src="vidz.mp4" type="video/mp4">
+                    </video>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 730 Reasons (Massive Database) -->
+    <section id="reasons" class="bg-white">
+        <div class="max-w-4xl text-center px-6 reveal">
+            <h2 class="text-4xl md:text-6xl cursive text-pink-600 mb-10">730 Reasons Why</h2>
+            <div class="glass p-10 md:p-16 min-h-[300px] flex items-center justify-center mb-12 relative overflow-hidden">
+                <div class="absolute top-0 left-0 p-8 opacity-5 text-8xl">❤</div>
+                <p id="reasonText" class="text-2xl md:text-4xl serif-italic text-pink-800 transition-all duration-700 leading-snug">
+                    I chose you because of the way you make the world feel safe just by being in it.
+                </p>
+                <div class="absolute bottom-0 right-0 p-8 opacity-5 text-8xl">❤</div>
+            </div>
+            <button onclick="generateReason()" class="group relative px-14 py-5 bg-pink-500 rounded-full overflow-hidden transition-all shadow-xl hover:shadow-pink-200 active:scale-95">
+                <span class="relative z-10 text-white font-bold tracking-widest">GIVE ME ANOTHER REASON</span>
+                <div class="absolute inset-0 bg-pink-600 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+            </button>
+        </div>
+    </section>
+
+    <!-- Our Lexicon (Inside Jokes) -->
+    <section id="lexicon" class="bg-rose-50/20">
+        <div class="max-w-5xl w-full px-6 reveal">
+            <h2 class="text-4xl md:text-6xl cursive text-pink-600 mb-12 text-center">Our Private Language</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="lexiconContainer">
+                <!-- Javascript will populate this -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery (Polaroid Style) -->
+    <section id="gallery" class="bg-white">
+        <h2 class="text-4xl md:text-5xl cursive text-pink-600 mb-16 reveal">The Frames We Built</h2>
+        <div class="flex space-x-10 overflow-x-auto pb-20 pt-10 px-12 no-scrollbar w-full mask-linear">
+            <!-- Polaroid Items -->
+            <div class="flex-none w-72 md:w-80 polaroid transform -rotate-3 hover:rotate-0 hover:-translate-y-6 reveal">
+                <div class="aspect-square bg-gray-50 overflow-hidden mb-6">
+                    <img src="ttirrth.jpeg">
+                </div>
+                <p class="text-center cursive text-2xl text-gray-700">I still remember that kiss when I pinned her against the wall, but the feeling I had—I can’t put it into words. My first kiss was truly very unique.</p>
+            </div>
+            <div class="flex-none w-72 md:w-80 polaroid transform rotate-2 hover:rotate-0 hover:-translate-y-6 reveal stagger-1">
+                <div class="aspect-square bg-gray-50 overflow-hidden mb-6">
+                    <img src="simm.jpeg">
+                </div>
+                <p class="text-center cursive text-2xl text-gray-700">Oh, that first hug… I had waited so long for it. Every day we used to talk about it—saying I’d hug you like this, hug you like that. And finally, when we came straight from school and hugged in the lift of my building… 🤌🤌
+That peace, that comfort— I can’t even explain it. That moment felt completely different, something truly special.” 🥹.</p>
+            </div>
+            <div class="flex-none w-72 md:w-80 polaroid transform -rotate-1 hover:rotate-0 hover:-translate-y-6 reveal stagger-2">
+                <div class="aspect-square bg-gray-50 overflow-hidden mb-6">
+                    <img src="first.jpeg">
+                </div>
+                <p class="text-center cursive text-2xl text-gray-700">That first photo was taken very nervously. After making sure the sir and ma’am were gone and fooling everyone else somehow, I managed to take that first photo. Even though it was nothing special, for me it was a very special moment 🥹.</p>
+            </div>
+            <div class="flex-none w-72 md:w-80 polaroid transform rotate-4 hover:rotate-0 hover:-translate-y-6 reveal stagger-3">
+                <div class="aspect-square bg-gray-50 overflow-hidden mb-6">
+                    <img src="zzz.jpeg">
+                </div>
+                <p class="text-center cursive text-2xl text-gray-700">She gets jealous, she worries about me, and honestly—that’s what I love about her. It makes me feel important and cared for. Knowing that someone thinks about me, protects me in her own way, and gets concerned when something’s wrong with me… it means a lot. Her jealousy isn’t toxic, it’s emotional. Her worry isn’t pressure, it’s love. With her, I feel valued, safe, and understood—and that’s a really special feeling. 💗.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mood Letters (Interactive Sanctuary) -->
+    <section id="mood-letters" class="bg-rose-50/25">
+        <div class="max-w-4xl text-center px-6 reveal">
+            <h2 class="text-4xl md:text-6xl cursive text-pink-600 mb-10">Read This When...</h2>
+            <p class="text-gray-500 mb-12 serif-italic text-xl">A sanctuary for whenever you need me most.</p>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <button onclick="showMoodLetter('sad')" class="glass p-6 hover:bg-white transition-all transform hover:-translate-y-2">
+                    <span class="text-3xl block mb-2">☁️</span>
+                    <span class="font-bold text-pink-600">You're Sad</span>
+                </button>
+                <button onclick="showMoodLetter('happy')" class="glass p-6 hover:bg-white transition-all transform hover:-translate-y-2">
+                    <span class="text-3xl block mb-2">☀️</span>
+                    <span class="font-bold text-pink-600">You're Happy</span>
+                </button>
+                <button onclick="showMoodLetter('tired')" class="glass p-6 hover:bg-white transition-all transform hover:-translate-y-2">
+                    <span class="text-3xl block mb-2">🌙</span>
+                    <span class="font-bold text-pink-600">You're Tired</span>
+                </button>
+                <button onclick="showMoodLetter('missing')" class="glass p-6 hover:bg-white transition-all transform hover:-translate-y-2">
+                    <span class="text-3xl block mb-2">🫂</span>
+                    <span class="font-bold text-pink-600">Missing Me</span>
+                </button>
+            </div>
+            <div id="letterDisplay" class="hidden mt-12 glass p-10 md:p-16 text-left relative reveal">
+                <button onclick="closeLetter()" class="absolute top-6 right-8 text-2xl text-pink-300">✕</button>
+                <div id="letterBody" class="text-lg md:text-xl leading-relaxed italic text-gray-700"></div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Digital Vows & Promises -->
+    <section id="promises" class="bg-gradient-to-b from-white to-[#fff0f3]">
+        <div class="max-w-5xl w-full grid grid-cols-1 md:grid-cols-2 gap-16 items-center px-6 reveal">
+            <div class="space-y-10">
+                <h2 class="text-5xl md:text-7xl cursive text-pink-600">My Promises</h2>
+                <div class="space-y-8 text-xl text-gray-600 serif-italic">
+                    <div class="flex gap-6 items-start group">
+                        <span class="text-pink-400 text-3xl group-hover:scale-125 transition-transform">✦</span>
+                        <p class="border-b border-pink-100 pb-2">To never stop being the person who falls in love with you every morning.</p>
+                    </div>
+                    <div class="flex gap-6 items-start group">
+                        <span class="text-pink-400 text-3xl group-hover:scale-125 transition-transform">✦</span>
+                        <p class="border-b border-pink-100 pb-2">To protect your dreams even more fiercely than I protect my own.</p>
+                    </div>
+                    <div class="flex gap-6 items-start group">
+                        <span class="text-pink-400 text-3xl group-hover:scale-125 transition-transform">✦</span>
+                        <p class="border-b border-pink-100 pb-2">To always be your safe place to land when the world gets too loud.</p>
+                    </div>
+                    <div class="flex gap-6 items-start group">
+                        <span class="text-pink-400 text-3xl group-hover:scale-125 transition-transform">✦</span>
+                        <p class="border-b border-pink-100 pb-2">To keep filling our calendar with adventures, big and small.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="glass p-10 md:p-16 transform rotate-2 shadow-2xl relative bg-white/90">
+                <div class="absolute -top-6 -left-6 text-6xl opacity-20 text-pink-500">“</div>
+                <p class="serif-italic text-2xl md:text-3xl text-pink-900 leading-relaxed italic mb-10">
+                    "They say the second year is where the real work begins. If this is work, I never want to retire. You are my favorite project, my favorite partner, and my favorite person."
+                </p>
+                <div class="h-px w-full bg-pink-100 mb-8"></div>
+                <div class="flex justify-between items-center">
+                    <span class="cursive text-3xl text-pink-600">Forever Yours, Tirthraj</span>
+                    <span class="text-4xl">💍</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- The Celestial Finale -->
+    <section id="celestial" class="bg-[#0a081a] text-white">
+        <div id="starField" class="absolute inset-0 overflow-hidden pointer-events-none"></div>
+        <div class="floating-heart text-white text-6xl top-20 left-20">❤️</div>
+        <div class="floating-heart text-white text-4xl bottom-20 right-40" style="animation-delay: 2s;">❤️</div>
+        
+        <div class="z-10 text-center max-w-4xl px-8 reveal">
+            <h2 class="text-4xl md:text-7xl cursive text-pink-300 mb-10">To Infinity and Beyond</h2>
+            <div class="glass bg-white/5 border-white/10 p-10 md:p-20 backdrop-blur-3xl mb-16 relative">
+                <div class="absolute -top-10 left-1/2 -translate-x-1/2 w-20 h-20 bg-pink-500 rounded-full flex items-center justify-center text-4xl shadow-2xl border-4 border-[#0a081a]">
+                    730
+                </div>
+                <p class="serif-italic text-2xl md:text-4xl leading-relaxed mb-10 text-pink-100">
+                    Ten February, 2026.
+                </p>
+                <p class="text-sm md:text-lg tracking-[0.6em] uppercase opacity-60 mb-10">Days Spent: 730 | Days Remaining: ∞</p>
+                <div class="h-px w-32 bg-pink-400 mx-auto mb-10"></div>
+                <p class="cursive text-4xl md:text-6xl text-pink-200">I love you. More than yesterday, less than tomorrow.</p>
+            </div>
+            
+            <p class="text-xs md:text-sm opacity-40 animate-pulse tracking-[0.4em] uppercase">Scroll back to relive every moment.</p>
+        </div>
+        
+        <div class="absolute bottom-8 left-10 text-[10px] md:text-xs opacity-30 tracking-widest uppercase flex gap-4">
+            <span>2 Years Milestone</span>
+            <span>•</span>
+            <span>Lat: 22.7519° N</span>
+            <span>Long: 72.705° W</span>
+        </div>
+    </section>
+
+    <!-- Massive Script Database -->
+    <script>
+        // --- 1. CONFIGURATION & DATA ---
+        
+        // Custom Cursor Logic
+        const cursor = document.getElementById('cursor');
+        if (window.matchMedia("(pointer: fine)").matches) {
+            document.addEventListener('mousemove', (e) => {
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
+            });
+            document.addEventListener('mousedown', () => cursor.style.transform = 'translate(-50%, -50%) scale(0.8)');
+            document.addEventListener('mouseup', () => cursor.style.transform = 'translate(-50%, -50%) scale(1)');
+        } else {
+            cursor.style.display = 'none';
+        }
+
+        // Live Counter (Feb 10, 2024)
+        const startDate = new Date('February 10, 2024 00:00:00').getTime();
+        function updateCounter() {
+            const now = new Date().getTime();
+            const diff = now - startDate;
+            document.getElementById('days').innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
+            document.getElementById('hours').innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            document.getElementById('minutes').innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            document.getElementById('seconds').innerText = Math.floor((diff % (1000 * 60)) / 1000);
+        }
+        setInterval(updateCounter, 1000);
+
+        // Reasons Database (Scalable to 730)
+        const reasons = [
+            "The way you look at me when you think I'm not looking.",
+            "How you make even the most boring Tuesday feel like an adventure.",
+            "Your laugh—it's still my favorite song after two years.",
+            "The way you always know exactly how much sugar I take in my coffee.",
+            "Your kindness, not just to me, but to every soul you meet.",
+            "How safe I feel when I'm tucked into your side.",
+            "The way you challenge me to be the person I've always wanted to be.",
+            "How you remember the names of all the characters in the movies I like.",
+            "The way your hand fits perfectly in mine, like it was designed that way.",
+            "Your resilience in the face of everything life throws at us.",
+            "The silly dances you do when you think you're alone in the kitchen.",
+            "How you always save the last bite of the best food for me.",
+            "Your voice is the first thing I want to hear every single morning.",
+            "The way you believe in me even when I don't believe in myself.",
+            "How you make our house feel like a home just by existing in it.",
+            "The way you smell like sunshine and comfort.",
+            "How you handle my bad moods with so much grace and patience.",
+            "Your sense of humor that only I truly understand.",
+            "The way you look in my oversized hoodies.",
+            "The future I see in your eyes every time we talk about 'next year'."
+            // Add more reasons to reach the full 730 if desired!
+        ];
+
+        function generateReason() {
+            const text = document.getElementById('reasonText');
+            text.style.opacity = 0;
+            text.style.transform = 'translateY(10px)';
+            setTimeout(() => {
+                text.innerText = reasons[Math.floor(Math.random() * reasons.length)];
+                text.style.opacity = 1;
+                text.style.transform = 'translateY(0)';
+            }, 500);
+        }
+
+        // Lexicon (Inside Jokes)
+        const lexiconItems = [
+            { word: "Teacher's Day", def: "The day when I see you first time in Saree, us din esa laga ki wo waqt wahi ruk jaye or kabhi aage hi na badhe, wo baar baar tuje dekhna, kuch bahana karke tuje dekhne aana, tujhse eye contact karna aakho hi aakho me bate hayyyeee..." },
+            { word: "The Struggle to meet you", def: "Roz roz milke esa sochna ki hug karenge, par... lekin jab pehli bar hug kiya tujhe wo sukoon kuch alag hi ehsas tha, us din lift me light kyu nahi chali gayi." },
+            { word: "Samji kuch", def: "252 days?." },
+            { word: "KARATE", def: "Us din tuje dekhne ka man kar rahi thi jab tu muje mar rahi thi wo din bhi bada hi alag tha that was unforggetable for me...." },
+            
+        ];
+
+        const lexContainer = document.getElementById('lexiconContainer');
+        lexiconItems.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'glass p-8 hover:bg-white transition-all transform hover:-translate-y-2 group reveal';
+            card.innerHTML = `
+                <h3 class="text-2xl font-bold text-pink-600 mb-3 group-hover:text-deep-rose transition-colors">${item.word}</h3>
+                <p class="text-gray-600 italic leading-relaxed">${item.def}</p>
+            `;
+            lexContainer.appendChild(card);
+        });
+
+        // Mood Letters
+        const letters = {
+            sad: "My love, if you're reading this and feeling a bit low, I want you to close your eyes for a second. Remember the time we sat by the water and just talked? I am right there with you. You are the strongest person I know, but you don't have to be strong right now. Let it out, breathe, and remember that I am coming home to you. You are my world.",
+            happy: "YES! I love that you're happy right now! Save this feeling in a bottle. Whatever just happened, you deserve it. I'm probably smiling just thinking about your smile. Let's celebrate tonight—tell me everything the second you see me. I love you so much!",
+            tired: "Hey sleepyhead. The world has been a lot today, hasn't it? Put your phone down after this. Drink some water. Stretch. You've done enough for today. I'm so proud of how hard you work and how much you give to others. Now, give some of that rest to yourself. I'll be there to hold you soon.",
+            missing: "I'm missing you too. Probably more than you can imagine. Look at the photo of us in the gallery above—the one where we're both laughing. That's us. That's our energy. This distance is temporary, but what we have is permanent. I'm counting down the minutes until I can hear your voice for real. Hang in there."
+        };
+
+        function showMoodLetter(mood) {
+            const display = document.getElementById('letterDisplay');
+            const body = document.getElementById('letterBody');
+            body.innerText = letters[mood];
+            display.classList.remove('hidden');
+            display.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function closeLetter() {
+            document.getElementById('letterDisplay').classList.add('hidden');
+        }
+
+        // Trivia Game Logic
+        const triviaQuestions = [
+            { q: "Where was our very first date?", a: ["The Park", "The Coffee Shop", "The Cinema", "The Beach"], c: 1 },
+            { q: "Who said 'I Love You' first?", a: ["You did", "I did", "Both at once", "The cat did"], c: 1 },
+            { q: "What was the first movie we watched together?", a: ["A Horror Movie", "That Indie Rom-Com", "The Superhero One", "A Documentary"], c: 2 },
+            { q: "What is my absolute favorite thing about you?", a: ["Your eyes", "Your laugh", "Your kindness", "All of the above"], c: 3 }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+
+        function startTrivia() {
+            currentQuestion = 0;
+            score = 0;
+            document.getElementById('triviaScore').classList.add('hidden');
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const q = triviaQuestions[currentQuestion];
+            document.getElementById('questionText').innerText = q.q;
+            const container = document.getElementById('optionsContainer');
+            container.innerHTML = '';
+            q.a.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'trivia-btn';
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(idx);
+                container.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(idx) {
+            if (idx === triviaQuestions[currentQuestion].c) score++;
+            currentQuestion++;
+            if (currentQuestion < triviaQuestions.length) {
+                showQuestion();
+            } else {
+                showScore();
+            }
+        }
+
+        function showScore() {
+            document.getElementById('questionText').innerText = "Game Over!";
+            document.getElementById('optionsContainer').innerHTML = `<button onclick="startTrivia()" class="trivia-btn">PLAY AGAIN</button>`;
+            const scoreDiv = document.getElementById('triviaScore');
+            scoreDiv.innerText = `You got ${score} out of ${triviaQuestions.length} right! But let's be honest, you're a 10/10 to me anyway.`;
+            scoreDiv.classList.remove('hidden');
+        }
+
+        // --- 2. ANIMATION & VISUALS ---
+
+        // Background Petals
+        function createPetal() {
+            const petal = document.createElement('div');
+            petal.innerHTML = Math.random() > 0.5 ? '🌸' : '💗';
+            petal.className = 'petal';
+            petal.style.left = Math.random() * 100 + 'vw';
+            petal.style.fontSize = (Math.random() * 18 + 10) + 'px';
+            const duration = (Math.random() * 6 + 6) + 's';
+            petal.style.setProperty('--d', duration);
+            document.body.appendChild(petal);
+            setTimeout(() => petal.remove(), 12000);
+        }
+        setInterval(createPetal, 1500);
+
+        // Star Field Finale
+        const starField = document.getElementById('starField');
+        for (let i = 0; i < 200; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            const size = Math.random() * 2.5 + 1 + 'px';
+            star.style.width = size;
+            star.style.height = size;
+            star.style.setProperty('--duration', (Math.random() * 4 + 2) + 's');
+            starField.appendChild(star);
+        }
+
+        // Intersection Observer for Reveal Animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    const id = entry.target.getAttribute('id');
+                    if (id) {
+                        document.querySelectorAll('.nav-dot').forEach(dot => {
+                            dot.classList.toggle('active', dot.getAttribute('href') === `#${id}`);
+                        });
+                    }
+                }
+            });
+        }, { threshold: 0.3 });
+
+        document.querySelectorAll('section, .reveal').forEach(el => observer.observe(el));
+
+    </script>
+</body>
+</html>
